@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -20,6 +21,12 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant created_At;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updated_At;
 
     public Category() {
     }
@@ -42,6 +49,24 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Instant getCreatedAt() {
+        return created_At;
+    }
+
+    public Instant getUpdatedAt() {
+        return updated_At;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        created_At = Instant.now();
+    }
+
+    @PreUpdate
+    public void  preUpdate() {
+        updated_At = Instant.now();
     }
 
     @Override
